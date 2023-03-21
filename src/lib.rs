@@ -1,4 +1,3 @@
-
 mod tests;
 
 #[derive(PartialEq, Eq, Debug)]
@@ -15,7 +14,7 @@ impl Direction {
             Direction::North => Direction::East,
             Direction::East => Direction::South,
             Direction::South => Direction::West,
-            Direction::West => Direction::North
+            Direction::West => Direction::North,
         }
     }
 
@@ -24,50 +23,68 @@ impl Direction {
             Direction::North => Direction::West,
             Direction::East => Direction::North,
             Direction::South => Direction::East,
-            Direction::West => Direction::South
+            Direction::West => Direction::South,
         }
     }
 }
 
-pub struct Robot{x: i32, y: i32, d: Direction}
+pub struct Robot {
+    x: i32,
+    y: i32,
+    d: Direction,
+}
 
 impl Robot {
     pub fn new(x: i32, y: i32, d: Direction) -> Self {
-        Robot{x, y, d}
+        Robot { x, y, d }
     }
 
     #[must_use]
     pub fn turn_right(self) -> Self {
-        Robot{d: self.d.turn_right(), ..self}
+        Robot {
+            d: self.d.turn_right(),
+            ..self
+        }
     }
 
     #[must_use]
     pub fn turn_left(self) -> Self {
-        Robot{d: self.d.turn_left(), ..self}
+        Robot {
+            d: self.d.turn_left(),
+            ..self
+        }
     }
 
     #[must_use]
     pub fn advance(self) -> Self {
         match self.d {
-            Direction::North => Robot{y: self.y+1, ..self},
-            Direction::South => Robot{y: self.y-1, ..self},
-            Direction::East => Robot{x: self.x+1, ..self},
-            Direction::West => Robot{x: self.x-1, ..self}
+            Direction::North => Robot {
+                y: self.y + 1,
+                ..self
+            },
+            Direction::South => Robot {
+                y: self.y - 1,
+                ..self
+            },
+            Direction::East => Robot {
+                x: self.x + 1,
+                ..self
+            },
+            Direction::West => Robot {
+                x: self.x - 1,
+                ..self
+            },
         }
     }
 
     #[must_use]
     pub fn instructions(self, instructions: &str) -> Self {
-        let mut result = Robot{..self};
-        for instruction in instructions.chars() {
-            result = match instruction {
-                'R' => result.turn_right(),
-                'L' => result.turn_left(),
-                'A' => result.advance(),
-                _ => panic!()
-            }
-        }
-        result
+        instructions.chars().fold(self, |robot, step| match step {
+            'R' => robot.turn_right(),
+            'L' => robot.turn_left(),
+            'A' => robot.advance(),
+            _ => panic!(),
+        })
     }
 
     pub fn position(&self) -> (i32, i32) {

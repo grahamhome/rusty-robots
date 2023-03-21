@@ -8,3 +8,4 @@ Use `cargo run` to tun tests.
 # Concepts Reviewed
 - Struct update syntax
 - Functional programming
+- fold()
